@@ -21,10 +21,11 @@ if [ -d $pluginPath/squeezelite ]; then
   ln -fs /data/plugins/music_service/squeezelite/known_working_versions/jessie/squeezelite-arm-minidspshd /opt/squeezelite
   echo "Add special config for minidsp ..."
   cp $pluginPath/squeezelite/config_minidsp.json $pluginPath/squeezelite/config.json
-  if [ $(grep -c "squeezelite" /volumio/app/plugins/music_service/inputs/index.js) -eq 0 ]; then
-    sed -i "s/self.commandRouter.volumioToggle();/self.commandRouter.volumioToggle();\nthis.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'pause');/g" /volumio/app/plugins/music_service/inputs/index.js
-    sed -i "s/self.commandRouter.volumioPrevious();/self.commandRouter.volumioPrevious();\nthis.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'previousSong');/g" /volumio/app/plugins/music_service/inputs/index.js
-    sed -i "s/self.commandRouter.volumioNext();/self.commandRouter.volumioNext();\nthis.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'nextSong');/g" /volumio/app/plugins/music_service/inputs/index.js
+  pluginInputs="/volumio/app/plugins/music_service/inputs/index.js"
+  if [ $(grep -c "squeezelite" $pluginInputs) -eq 0 ]; then
+    sed -i "s/self.commandRouter.volumioToggle();/this.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'pause');\n    self.commandRouter.volumioToggle();/g" $pluginInputs
+    sed -i "s/self.commandRouter.volumioPrevious();/this.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'previousSong');\n    self.commandRouter.volumioPrevious();/g" $pluginInputs
+    sed -i "s/self.commandRouter.volumioNext();/this.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'nextSong');\n    self.commandRouter.volumioNext();/g" $pluginInputs
   else
     echo "Plugin inputs already updated ..."
   fi
