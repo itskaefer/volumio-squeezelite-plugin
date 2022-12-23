@@ -376,7 +376,7 @@ ControllerSqueezelite.prototype.constructUnit = function(unitTemplate, unitFile)
 		defer.reject();
 	});
 	return defer.promise;
-}
+};
 
 ControllerSqueezelite.prototype.replaceStringsInFile = function(sourceFilePath, destinationFilePath, replacements)
 {
