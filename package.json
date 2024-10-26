@@ -11,7 +11,7 @@
 	"volumio_info": {
 		"prettyName": "Squeezelite Player",
 		"icon": "fa fa-music",
-		"plugin_type": "music_service",
+		"plugin_type": "audio_interface",
 		"boot_priority": 10,
 		"os": [
 			"buster",

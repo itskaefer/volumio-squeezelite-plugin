@@ -1,7 +1,7 @@
 ## Squeezelite installation script
 echo "Installing Squeezelite and its dependencies..."
 INSTALLING="/home/volumio/squeezelite-plugin.installing"
-PLUGIN_DIR="/data/plugins/music_service/squeezelite"
+PLUGIN_DIR="/data/plugins/audio_interface/squeezelite"
 
 if [ ! -f $INSTALLING ]; then
   /bin/touch $INSTALLING
@@ -58,7 +58,7 @@ if [ ! -f $INSTALLING ]; then
 
     
     if [ $variant = "minidspshd" ]; then
-      pluginsPath="/data/plugins/music_service"
+      pluginsPath="/data/plugins/audio_interface"
       
       # miniDSP needs special extra parameters
       rm $PLUGIN_DIR/config.json
@@ -66,13 +66,13 @@ if [ ! -f $INSTALLING ]; then
       
       # special functions for working remote buttons play,pause,next,previous are only working on the old volumio2 system for now
       if [ $dist = "jessie" ]; then 
-        pluginInputs="/volumio/app/plugins/music_service/inputs/index.js"
+        pluginInputs="/volumio/app/plugins/audio_interface/inputs/index.js"
         echo "Add special config for minidsp ..."
         cp $pluginsPath/squeezelite/config_minidsp.json $pluginsPath/squeezelite/config.json
         if [ $(grep -c "squeezelite" $pluginInputs ) -eq 0 ]; then
-          sed -i "s/self.commandRouter.volumioToggle();/this.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'pause');\n    self.commandRouter.volumioToggle();/g" $pluginInputs
-          sed -i "s/self.commandRouter.volumioPrevious();/this.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'previousSong');\n    self.commandRouter.volumioPrevious();/g" $pluginInputs
-          sed -i "s/self.commandRouter.volumioNext();/this.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'nextSong');\n    self.commandRouter.volumioNext();/g" $pluginInputs
+          sed -i "s/self.commandRouter.volumioToggle();/this.commandRouter.executeOnPlugin('audio_interface', 'squeezelite', 'pause');\n    self.commandRouter.volumioToggle();/g" $pluginInputs
+          sed -i "s/self.commandRouter.volumioPrevious();/this.commandRouter.executeOnPlugin('audio_interface', 'squeezelite', 'previousSong');\n    self.commandRouter.volumioPrevious();/g" $pluginInputs
+          sed -i "s/self.commandRouter.volumioNext();/this.commandRouter.executeOnPlugin('audio_interface', 'squeezelite', 'nextSong');\n    self.commandRouter.volumioNext();/g" $pluginInputs
         else
           echo "Plugin inputs already updated ..."
         fi

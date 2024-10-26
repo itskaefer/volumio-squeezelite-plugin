@@ -11,7 +11,7 @@
 			"icon": "fa-cogs",
 			"onSave": {
 				"type": "controller",
-				"endpoint": "music_service/squeezelite",
+				"endpoint": "audio_interface/squeezelite",
 				"method": "updateSqueezeliteServiceConfig"
 			},
 			"saveButton": {
@@ -47,7 +47,7 @@
 			"icon": "fa-volume-up",
 			"onSave": {
 				"type": "controller",
-				"endpoint": "music_service/squeezelite",
+				"endpoint": "audio_interface/squeezelite",
 				"method": "updateSqueezeliteAudioConfig"
 			},
 			"saveButton": {

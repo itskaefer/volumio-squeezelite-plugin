@@ -51,9 +51,6 @@ ControllerSqueezelite.prototype.onStop = function() {
 	var self = this;
 	var defer = libQ.defer();
     
-    // Remove from music sources
-    this.commandRouter.volumioRemoveToBrowseSources('squeezelite');
-  
 	self.stopService('squeezelite')
 	.then(function(edefer)
 	{
@@ -86,18 +83,6 @@ ControllerSqueezelite.prototype.stop = function() {
 ControllerSqueezelite.prototype.onStart = function() {
     var self = this;
     var defer = libQ.defer();
-    // Add navigation data
-    var navigationData = {
-      name: 'Squeezelite',
-      uri: 'squeezelite',
-      plugin_type: 'music_service',
-      icon: 'fa fa-music',
-      albumart: '/albumart'
-    };
-
-    // Add to music sources
-    this.commandRouter.volumioAddToBrowseSources(navigationData);
-
     self.restartService('squeezelite', true)
     .then(function(edefer) {
       defer.resolve();
