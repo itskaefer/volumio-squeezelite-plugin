@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "Saiyato",
+	"author": "itskaefer",
 	"license": "GPL-3.0",
 	"volumio_info": {
 		"prettyName": "Squeezelite Player",
@@ -39,7 +39,7 @@
 		"example": "examples"
 	},
 	"devDependencies": {},
-	"repository": "https://github.com/Saiyato/volumio-squeezelite-plugin",
+	"repository": "https://github.com/itskaefer/volumio-squeezelite-plugin",
 	"keywords": [
 		"squeezelite",
 		"multiroom",
