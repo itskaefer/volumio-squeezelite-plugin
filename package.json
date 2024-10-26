@@ -31,9 +31,9 @@
 		"volumio": ">=2.0.0"
 	},
 	"dependencies": {
-		"fs-extra": "^0.28.0",
-		"kew": "^0.7.0",
-		"v-conf": "^1.4.0"
+		"fs-extra": ">=0.28.0",
+		"kew": ">=0.7.0",
+		"v-conf": ">=1.4.0"
 	},
 	"directories": {
 		"example": "examples"
