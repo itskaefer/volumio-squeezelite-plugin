@@ -48,19 +48,24 @@ if [ ! -f $INSTALLING ]; then
 		
 	# activate default unit
 	TMPUNIT="$PLUGIN_DIR/unit/squeezelite.service"
-	chown volumio $TMPUNIT
+    cp $TMPUNIT-template $TMPUNIT
+	chown volumio:volumio $TMPUNIT
 
-	sed 's|${NAME}|-n Volumio|g' -i $TMPUNIT
+    # set default values
 	sed 's|${OUTPUT_DEVICE}|-o default|g' -i $TMPUNIT
 	sed 's|${ALSA_PARAMS}|-a 80:4::|g' -i $TMPUNIT
     sed 's|${SERVER_PARAMS}|-s 127.0.0.1|g' -i $TMPUNIT
-    # sed 's|${EXTRA_PARAMS}||g' -i $TMPUNIT  - moved down
 
     
     if [ $variant = "minidspshd" ]; then
+      pluginsPath="/data/plugins/music_service"
+      
+      # miniDSP needs special extra parameters
+      rm $PLUGIN_DIR/config.json
+      mv $PLUGIN_DIR/config_minidsp.json $PLUGIN_DIR/config.json
+      
       # special functions for working remote buttons play,pause,next,previous are only working on the old volumio2 system for now
       if [ $dist = "jessie" ]; then 
-        pluginsPath="/data/plugins/music_service"
         pluginInputs="/volumio/app/plugins/music_service/inputs/index.js"
         echo "Add special config for minidsp ..."
         cp $pluginsPath/squeezelite/config_minidsp.json $pluginsPath/squeezelite/config.json
@@ -74,8 +79,10 @@ if [ ! -f $INSTALLING ]; then
       fi
       echo "Fix permissions ..."
       chown -R volumio:volumio $pluginsPath/squeezelite
+      sed 's|${NAME}|-n miniDSP-SHD|g' -i $TMPUNIT
       sed 's|${EXTRA_PARAMS}|-r 44100-196000 -R vE:::24|g' -i $TMPUNIT
     else
+      sed 's|${NAME}|-n Volumio|g' -i $TMPUNIT
       sed 's|${EXTRA_PARAMS}||g' -i $TMPUNIT
     fi
 		
@@ -83,11 +90,11 @@ if [ ! -f $INSTALLING ]; then
     if [ -f /etc/systemd/system/squeezelite.service ]; then
       rm /etc/systemd/system/squeezelite.service
     fi
-	  ln -fs $PLUGIN_DIR/unit/squeezelite.service /etc/systemd/system/squeezelite.service
-	  systemctl daemon-reload
-	else
-		echo "Plugin already exists, not continuing."
-	fi
+	ln -fs $PLUGIN_DIR/unit/squeezelite.service /etc/systemd/system/squeezelite.service
+	systemctl daemon-reload
+  else
+    echo "Plugin already exists, not continuing."
+  fi
 	
 	rm $INSTALLING
 
