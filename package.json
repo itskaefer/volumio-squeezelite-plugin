@@ -1,6 +1,6 @@
 {
 	"name": "squeezelite",
-	"version": "1.1.7",
+	"version": "1.1.8",
 	"description": "Installs the Squeezelite player you can use in combination with the Logitech Media Server",
 	"main": "index.js",
 	"scripts": {
@@ -9,16 +9,18 @@
 	"author": "Saiyato",
 	"license": "GPL-3.0",
 	"volumio_info": {
-		"prettyName": "Squeezelite player",
+		"prettyName": "Squeezelite Player",
 		"icon": "fa fa-music",
 		"plugin_type": "music_service",
 		"os": [
-			"buster"
+			"buster",
+            "jessie"
 		],
 		"architectures": [
 			"amd64",
 			"i386",
-			"armhf"
+			"armhf",
+            "aarch64",
 		],
 		"details": "Client plugin for the LMS ecosystem",
 		"changelog": "Slightly refactored client-plugin"

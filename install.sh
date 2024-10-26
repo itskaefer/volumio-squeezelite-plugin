@@ -1,50 +1,58 @@
 ## Squeezelite installation script
 echo "Installing Squeezelite and its dependencies..."
 INSTALLING="/home/volumio/squeezelite-plugin.installing"
+PLUGIN_DIR="/data/plugins/music_service/squeezelite"
 
 if [ ! -f $INSTALLING ]; then
-	/bin/touch $INSTALLING
+  /bin/touch $INSTALLING
 
-	if [ ! -d /opt/squeezelite ]; then
-		dist=$(cat /etc/os-release | grep '^VERSION=' | cut -d '(' -f2 | tr -d ')"')
-		arch=$(arch)
+  if [ ! -d /opt/squeezelite ]; then
+	dist=$(cat /etc/os-release | grep '^VERSION=' | cut -d '(' -f2 | tr -d ')"')
+	arch=$(arch)
     variant=$(cat /etc/os-release | grep '^VOLUMIO_VARIANT=' | cut -d '=' -f2 | tr -d '"')
 
-    if [ $dist = "jessie" ] && [ $variant = "minidspshd" ] && ( [ $arch = "armv6l" ] || [ $arch = "armv7l" ] || [ $arch = "aarch64" ] ); then
+    # volumio minidsp distribution
+    if ([ $dist = "jessie" ] || [ $dist = "buster" ]) && [ $variant = "minidspshd" ] && ( [ $arch = "armv6l" ] || [ $arch = "armv7l" ] || [ $arch = "aarch64" ] ); then
       echo "Using squeezelite 1.9.9 armel static architecture (detected minidsp SHD)"
-      ln -fs /data/plugins/music_service/squeezelite/known_working_versions/jessie/squeezelite-arm-minidspshd /opt/squeezelite
+      ln -fs $PLUGIN_DIR/known_working_versions/jessie/squeezelite-arm-minidspshd /opt/squeezelite
+    # regular volumio2 distribution
     elif [ $dist = "jessie" ] && ( [ $arch = "armv6l" ] || [ $arch = "armv7l" ] || [ $arch = "aarch64" ] ); then
       echo "Using squeezelite 1.8.7 for compatibility reasons (detected Debian Jessie)"
-			ln -fs /data/plugins/music_service/squeezelite/known_working_versions/jessie/squeezelite-armv6hf-volumio /opt/squeezelite
-		elif [ $dist = "buster" ] && ( [ $arch = "armv6l" ] || [ $arch = "armv7l" ] ); then
-			echo "Using squeezelite 1.9.9 for armhf architecture"
-			ln -fs /data/plugins/music_service/squeezelite/known_working_versions/squeezelite-1.9.9.1392-armhf /opt/squeezelite
-		elif [ $dist = "buster" ] && ( [ $arch = "aarch64" ] ); then
-			echo "Using squeezelite 1.9.9 for aarch64 architecture"
-			ln -fs /data/plugins/music_service/squeezelite/known_working_versions/squeezelite-1.9.9.1392-aarch64 /opt/squeezelite
-		elif [ $dist = "buster" ] && ( [ $arch = "x86_64" ] ); then
-			echo "Using squeezelite 1.9.9 for x86_64 architecture"
-			ln -fs /data/plugins/music_service/squeezelite/known_working_versions/squeezelite-1.9.9.1392-x86_64 /opt/squeezelite
-		elif [ $dist = "buster" ] && ( [ $arch = "i686" ] ); then
-			echo "Using squeezelite 1.9.9 for i686 architecture"
-			ln -fs /data/plugins/music_service/squeezelite/known_working_versions/squeezelite-1.9.9.1392-i686 /opt/squeezelite
-		fi
+	  ln -fs $PLUGIN_DIR/known_working_versions/jessie/squeezelite-armv6hf-volumio /opt/squeezelite
+    # regular volumio3 distribution with 32bit arm cpu
+	elif [ $dist = "buster" ] && ( [ $arch = "armv6l" ] || [ $arch = "armv7l" ] ); then
+	  echo "Using squeezelite 1.9.9 for armhf architecture"
+	  ln -fs $PLUGIN_DIR/known_working_versions/squeezelite-1.9.9.1392-armhf /opt/squeezelite
+    # regular volumio3 distribution with 64bit arm cpu
+	elif [ $dist = "buster" ] && ( [ $arch = "aarch64" ] ); then
+	  echo "Using squeezelite 1.9.9 for aarch64 architecture"
+	  ln -fs $PLUGIN_DIR/known_working_versions/squeezelite-1.9.9.1392-aarch64 /opt/squeezelite
+    # regular volumio3 distribution with 64bit x86 cpu 
+	elif [ $dist = "buster" ] && ( [ $arch = "x86_64" ] ); then
+	  echo "Using squeezelite 1.9.9 for x86_64 architecture"
+	  ln -fs $PLUGIN_DIR/known_working_versions/squeezelite-1.9.9.1392-x86_64 /opt/squeezelite
+    # regular volumio3 distribution with 32bit x86 cpu
+	elif [ $dist = "buster" ] && ( [ $arch = "i686" ] ); then
+	  echo "Using squeezelite 1.9.9 for i686 architecture"
+	  ln -fs $PLUGIN_DIR/known_working_versions/squeezelite-1.9.9.1392-i686 /opt/squeezelite
+	fi
 
     # Fix executable rights
-		chown volumio:volumio /opt/squeezelite
-		chmod 755 /opt/squeezelite
+	chown volumio:volumio /opt/squeezelite
+	chmod 755 /opt/squeezelite
 		
-		# activate default unit
-		TMPUNIT="/data/plugins/music_service/squeezelite/unit/squeezelite.service"
-		chown volumio $TMPUNIT
+	# activate default unit
+	TMPUNIT="$PLUGIN_DIR/unit/squeezelite.service"
+	chown volumio $TMPUNIT
 
-		sed 's|${NAME}|-n Volumio|g' -i $TMPUNIT
-		sed 's|${OUTPUT_DEVICE}|-o default|g' -i $TMPUNIT
-		sed 's|${ALSA_PARAMS}|-a 80:4::|g' -i $TMPUNIT
+	sed 's|${NAME}|-n Volumio|g' -i $TMPUNIT
+	sed 's|${OUTPUT_DEVICE}|-o default|g' -i $TMPUNIT
+	sed 's|${ALSA_PARAMS}|-a 80:4::|g' -i $TMPUNIT
     sed 's|${SERVER_PARAMS}|-s 127.0.0.1|g' -i $TMPUNIT
     # sed 's|${EXTRA_PARAMS}||g' -i $TMPUNIT  - moved down
 
-    if [ $variant = "minidspshd" ]; then
+    # special functions for working remote buttons play,pause,next,previous are only working on the old volumio2 system for now
+    if [ $dist = "jessie" ] && [ $variant = "minidspshd" ]; then
       pluginPath="/data/plugins/music_service"
       pluginInputs="/volumio/app/plugins/music_service/inputs/index.js"
       echo "Add special config for minidsp ..."
@@ -63,13 +71,12 @@ if [ ! -f $INSTALLING ]; then
       sed 's|${EXTRA_PARAMS}||g' -i $TMPUNIT
     fi
 		
-		#mv $TMPUNIT /etc/systemd/system/squeezelite.service
+	#mv $TMPUNIT /etc/systemd/system/squeezelite.service
     if [ -f /etc/systemd/system/squeezelite.service ]; then
       rm /etc/systemd/system/squeezelite.service
     fi
-		ln -fs /data/plugins/music_service/squeezelite/unit/squeezelite.service /etc/systemd/system/squeezelite.service
-		systemctl daemon-reload
-		
+	  ln -fs $PLUGIN_DIR/unit/squeezelite.service /etc/systemd/system/squeezelite.service
+	  systemctl daemon-reload
 	else
 		echo "Plugin already exists, not continuing."
 	fi
