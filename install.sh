@@ -56,21 +56,24 @@ if [ ! -f $INSTALLING ]; then
     sed 's|${SERVER_PARAMS}|-s 127.0.0.1|g' -i $TMPUNIT
     # sed 's|${EXTRA_PARAMS}||g' -i $TMPUNIT  - moved down
 
-    # special functions for working remote buttons play,pause,next,previous are only working on the old volumio2 system for now
-    if [ $dist = "jessie" ] && [ $variant = "minidspshd" ]; then
-      pluginPath="/data/plugins/music_service"
-      pluginInputs="/volumio/app/plugins/music_service/inputs/index.js"
-      echo "Add special config for minidsp ..."
-      cp $pluginPath/squeezelite/config_minidsp.json $pluginPath/squeezelite/config.json
-      if [ $(grep -c "squeezelite" $pluginInputs ) -eq 0 ]; then
-        sed -i "s/self.commandRouter.volumioToggle();/this.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'pause');\n    self.commandRouter.volumioToggle();/g" $pluginInputs
-        sed -i "s/self.commandRouter.volumioPrevious();/this.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'previousSong');\n    self.commandRouter.volumioPrevious();/g" $pluginInputs
-        sed -i "s/self.commandRouter.volumioNext();/this.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'nextSong');\n    self.commandRouter.volumioNext();/g" $pluginInputs
-      else
-        echo "Plugin inputs already updated ..."
+    
+    if [ $variant = "minidspshd" ]; then
+      # special functions for working remote buttons play,pause,next,previous are only working on the old volumio2 system for now
+      if [ $dist = "jessie" ]; then 
+        pluginsPath="/data/plugins/music_service"
+        pluginInputs="/volumio/app/plugins/music_service/inputs/index.js"
+        echo "Add special config for minidsp ..."
+        cp $pluginsPath/squeezelite/config_minidsp.json $pluginsPath/squeezelite/config.json
+        if [ $(grep -c "squeezelite" $pluginInputs ) -eq 0 ]; then
+          sed -i "s/self.commandRouter.volumioToggle();/this.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'pause');\n    self.commandRouter.volumioToggle();/g" $pluginInputs
+          sed -i "s/self.commandRouter.volumioPrevious();/this.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'previousSong');\n    self.commandRouter.volumioPrevious();/g" $pluginInputs
+          sed -i "s/self.commandRouter.volumioNext();/this.commandRouter.executeOnPlugin('music_service', 'squeezelite', 'nextSong');\n    self.commandRouter.volumioNext();/g" $pluginInputs
+        else
+          echo "Plugin inputs already updated ..."
+        fi
       fi
       echo "Fix permissions ..."
-      chown -R volumio:volumio $pluginPath/squeezelite
+      chown -R volumio:volumio $pluginsPath/squeezelite
       sed 's|${EXTRA_PARAMS}|-r 44100-196000 -R vE:::24|g' -i $TMPUNIT
     else
       sed 's|${EXTRA_PARAMS}||g' -i $TMPUNIT

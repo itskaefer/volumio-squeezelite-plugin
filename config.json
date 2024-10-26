@@ -25,6 +25,6 @@
   },
   "extra_params": {
     "type": "string",
-    "value": ""
+    "value": "-r 48000"
   }
 }

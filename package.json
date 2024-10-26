@@ -12,16 +12,16 @@
 		"prettyName": "Squeezelite Player",
 		"icon": "fa fa-music",
 		"plugin_type": "music_service",
-        "boot_priority": 10,
+		"boot_priority": 10,
 		"os": [
 			"buster",
-            "jessie"
+			"jessie"
 		],
 		"architectures": [
 			"amd64",
 			"i386",
 			"armhf",
-            "aarch64",
+			"aarch64"
 		],
 		"details": "Client plugin for the LMS ecosystem",
 		"changelog": "Slightly refactored client-plugin"

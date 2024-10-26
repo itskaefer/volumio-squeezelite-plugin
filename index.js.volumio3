@@ -50,6 +50,10 @@ ControllerSqueezelite.prototype.getConfigurationFiles = function()
 ControllerSqueezelite.prototype.onStop = function() {
 	var self = this;
 	var defer = libQ.defer();
+    
+    // Remove from music sources
+    this.commandRouter.volumioRemoveToBrowseSources('squeezelite');
+  
 	self.stopService('squeezelite')
 	.then(function(edefer)
 	{
@@ -110,6 +114,39 @@ ControllerSqueezelite.prototype.onRestart = function()
 {
 	// self.logger.info("performing onRestart action");
 	var self = this;
+};
+
+ControllerSqueezelite.prototype.handleBrowseUri = function(curUri) {
+  var self = this;
+  var response;
+
+  if (curUri.startsWith('squeezelite')) {
+    response = {
+      navigation: {
+        prev: {
+          uri: '/'
+        },
+        lists: [
+          {
+            title: 'Squeezelite',
+            icon: 'fa fa-music',
+            availableListViews: ['list'],
+            items: [
+              {
+                service: 'squeezelite',
+                type: 'folder',
+                title: 'Settings',
+                icon: 'fa fa-cogs',
+                uri: 'squeezelite/settings'
+              }
+            ]
+          }
+        ]
+      }
+    };
+  }
+
+  return libQ.resolve(response);
 };
 
 ControllerSqueezelite.prototype.onInstall = function()
