@@ -1,6 +1,6 @@
-## LMS uninstallation script
-echo "Uninstalling LMS and its dependencies..."
-INSTALLING="/home/volumio/lms-plugin.uninstalling"
+## Squeezelite uninstallation script
+echo "Uninstalling Squeezelite and its dependencies..."
+INSTALLING="/home/volumio/squeezelite-plugin.uninstalling"
 
 if [ ! -f $INSTALLING ]; then
 
