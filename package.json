@@ -12,6 +12,7 @@
 		"prettyName": "Squeezelite Player",
 		"icon": "fa fa-music",
 		"plugin_type": "music_service",
+        "boot_priority": 10,
 		"os": [
 			"buster",
             "jessie"

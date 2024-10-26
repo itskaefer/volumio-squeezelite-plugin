@@ -10,6 +10,11 @@ if [ ! -f $INSTALLING ]; then
 	dist=$(cat /etc/os-release | grep '^VERSION=' | cut -d '(' -f2 | tr -d ')"')
 	arch=$(arch)
     variant=$(cat /etc/os-release | grep '^VOLUMIO_VARIANT=' | cut -d '=' -f2 | tr -d '"')
+    
+    if [ $dist = "buster" ]; then
+      rm $PLUGIN_DIR/index.js
+      mv $PLUGIN_DIR/index.js.volumio3 index.js
+    fi
 
     # volumio minidsp distribution
     if ([ $dist = "jessie" ] || [ $dist = "buster" ]) && [ $variant = "minidspshd" ] && ( [ $arch = "armv6l" ] || [ $arch = "armv7l" ] || [ $arch = "aarch64" ] ); then
