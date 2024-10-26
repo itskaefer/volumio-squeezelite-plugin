@@ -8,7 +8,7 @@
 		"INSTANCE_NAME":"Instance name",
 		"D_INSTANCE_NAME":"Controls how the player will appear in the LMS webconsole.",
 	"AUDIO":"Configure audio output settings",
-	"D_AUDIO":"Sound output can be controlled with the below settings.<br /><small>If the service doesn't start try to add the '-r' Parameter with something like '-r 48000-96000'</small>",
+	"D_AUDIO":"Sound output can be controlled with the below settings.",
 		"OUTPUT_DEVICE":"Output device",
 		"D_OUTPUT_DEVICE":"Choose the output device you want to use for this Squeezelite instance.",
 		"SOUNDCARD_TIMEOUT":"Close soundcard after x seconds",
