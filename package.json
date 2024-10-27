@@ -36,7 +36,7 @@
 		"example": "examples"
 	},
 	"devDependencies": {},
-	"repository": "https://github.com/Saiyato/volumio-squeezelite-plugin",
+	"repository": "https://github.com/itskaefer/volumio-squeezelite-plugin",
 	"keywords": [
 		"squeezelite",
 		"multiroom",
